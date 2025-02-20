@@ -13,7 +13,8 @@ const addOrderItems = asyncHandler(async (req, res) => {
   if (orderItems && orderItems.length === 0) {
     res.status(400);
     throw new Error('No order items');
-  } else {   
+  } else {
+
 
     // get the ordered items from our database
     const itemsFromDB = await Product.find({
@@ -59,7 +60,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
 // @access  Private
 const getMyOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find({ user: req.user._id });
-  res.json(orders);
+  res.status(200).json(orders);
 });
 
 // @desc    Get order by ID
@@ -72,7 +73,7 @@ const getOrderById = asyncHandler(async (req, res) => {
   );
 
   if (order) {
-    res.status(200).json(order);
+    res.json(order);
   } else {
     res.status(404);
     throw new Error('Order not found');

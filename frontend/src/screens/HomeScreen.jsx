@@ -18,11 +18,11 @@ const HomeScreen = () => {
   });
 
 
-  // <ProductCarousel /> instead of placeholder
+  
   return (
     <>
       {!keyword ? (        
-        <p>Placeholder for product carousel</p>         
+         <ProductCarousel />         
       ) : (
         <Link to='/' className='btn btn-light mb-4'>
           Go Back
@@ -36,7 +36,7 @@ const HomeScreen = () => {
         </Message>
       ) : (
         <>
-          {/* <Meta />*/}
+           <Meta />
           <h1>Latest Products</h1>
           <Row>
             {data.products.map((product) => (

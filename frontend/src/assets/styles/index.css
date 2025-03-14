@@ -43,11 +43,32 @@ main {
     margin-top: 10px;
   }
   
-  .carousel-caption {
-    position: absolute;
-    width: 100%;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-  }
+
+/* Make the entire carousel shorter */
+.carousel {
+  max-height: 200px; /* Adjust height as needed */
+  overflow: hidden;
+}
+
+/* Ensure each item inside the carousel follows the height limit */
+.carousel-item {
+  max-height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Adjust image size */
+.carousel-item img {
+  max-height: 150px; /* Keep images smaller */
+  width: auto;
+  object-fit: contain;
+}
+
+/* Adjust caption placement if needed */
+.carousel-caption {
+  bottom: 5px; /* Moves the caption up */
+  font-size: 14px; /* Make text smaller if needed */
+}
+    
+ 

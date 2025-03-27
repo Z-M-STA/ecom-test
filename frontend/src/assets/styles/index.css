@@ -44,7 +44,7 @@ main {
   }
   
 
-/* Make the entire carousel shorter */
+/* Mikrotero carousel */
 .carousel {
   max-height: 200px; /* Adjust height as needed */
   overflow: hidden;
@@ -65,7 +65,7 @@ main {
   object-fit: contain;
 }
 
-/* Adjust caption placement if needed */
+/* Adjust caption placement */
 .carousel-caption {
   bottom: 5px; /* Moves the caption up */
   font-size: 14px; /* Make text smaller if needed */

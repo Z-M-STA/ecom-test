@@ -100,6 +100,17 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
     const paidCorrectAmount = order.totalPrice.toString() === value;
     if (!paidCorrectAmount) throw new Error('Incorrect amount paid');
 
+    // Update stock for each item in the order
+    for (const item of order.orderItems) {
+      const product = await Product.findById(item.product);
+      if (product) {
+        product.countInStock -= item.qty;
+        await product.save();
+      } else {
+        throw new Error(`Product not found: ${item.product}`);
+      }
+    }
+
     order.isPaid = true;
     order.paidAt = Date.now();
     order.paymentResult = {

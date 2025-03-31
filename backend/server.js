@@ -15,9 +15,12 @@ connectDB(); //Connecting to mongoDB
 
 const app = express();
 
+
 // Body parser middleware
-app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+// limit set so high 130mb cause i want to be able to use the free hosting service of render. Scufeed practices 101
+
+app.use(express.json({limit: '130mb'}));
+app.use(express.urlencoded({extended: true}));// app.use(express.urlencoded({limit: '130mb'},{extended: true}));
 
 // Cookie parser middleware
 app.use(cookieParser());

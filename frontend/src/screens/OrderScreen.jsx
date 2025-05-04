@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap';
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
@@ -14,8 +14,11 @@ import {
 } from '../slices/ordersApiSlice';
 import { addDecimals } from '../utils/cartUtils';
 
-const OrderScreen = () => {
+
+
+const OrderScreen = () => { 
   const { id: orderId } = useParams();
+  
 
   const {
     data: order,
@@ -39,25 +42,48 @@ const OrderScreen = () => {
     error: errorPayPal,
   } = useGetPaypalClientIdQuery();
 
+  const didScriptLoad = useRef(false); //test
+
   useEffect(() => {
-    if (!errorPayPal && !loadingPayPal && paypal.clientId) {
-      const loadPaypalScript = async () => {
-        paypalDispatch({
-          type: 'resetOptions',
-          value: {
-            'client-id': paypal.clientId,
-            currency: 'USD',
-          },
-        });
-        paypalDispatch({ type: 'setLoadingStatus', value: 'pending' });
-      };
-      if (order && !order.isPaid) {
-        if (!window.paypal) {
-          loadPaypalScript();
-        }
-      }
+    if (
+      !loadingPayPal &&
+      !errorPayPal &&
+      paypal?.clientId &&
+      !didScriptLoad.current
+    ) {
+      paypalDispatch({
+        type: 'resetOptions',
+        value: {
+          'client-id': paypal.clientId,
+          currency: 'EUR',        
+        },
+      });
+      paypalDispatch({ type: 'setLoadingStatus', value: 'pending' });
+      didScriptLoad.current = true;
     }
-  }, [errorPayPal, loadingPayPal, order, paypal, paypalDispatch]);
+  }, [loadingPayPal, errorPayPal, paypal, paypalDispatch]); //test
+
+  // useEffect(() => {
+  //   if (!errorPayPal && !loadingPayPal && paypal.clientId) {
+  //     const loadPaypalScript = async () => {
+  //       paypalDispatch({
+  //         type: 'resetOptions',
+  //         value: {
+  //           'client-id': paypal.clientId,
+  //           currency: 'EUR',
+  //         },
+  //       });
+  //       paypalDispatch({ type: 'setLoadingStatus', value: 'pending' });
+  //     };
+  //     if (order && !order.isPaid) {
+  //       if (!window.paypal) {
+  //         loadPaypalScript();
+  //       }
+  //     }
+  //   }
+  // }, [errorPayPal, loadingPayPal, order, paypal, paypalDispatch]);  //og useEffect
+
+
 
   function onApprove(data, actions) {
     return actions.order.capture().then(async function (details) {
@@ -80,7 +106,7 @@ const OrderScreen = () => {
       .create({
         purchase_units: [
           {
-            amount: { value: order.totalPrice },
+            amount: { value: order.totalPrice,currency_code: 'EUR' },
           },
         ],
       })
